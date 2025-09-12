@@ -17,7 +17,7 @@ function LandingPage() {
         participants.
       </p>
 
-      {/* Info Cards */}
+      
       <div className="landing-info">
         <div className="info-card">
           <FaUniversity size={40} color="#ff6600" />
@@ -39,7 +39,7 @@ function LandingPage() {
           className="primary-btn"
           onClick={() => navigate("/main")}
         >
-          <FaArrowRight style={{ marginRight: "8px" }} /> Get Started
+           Get Started <FaArrowRight style={{ marginRight: "8px" }} />
         </button>
       </div>
     </div>
