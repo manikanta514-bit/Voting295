@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import VotingPage from "./pages/Votingpage";
+import MainPage from "./pages/Mainpage";
+import SetupCandidates from "./pages/SetupCandidates";
+import ResultsPage from "./pages/ResultsPage";
+import LandingPage from "./pages/LandingPage";
+import AboutPage from "./pages/AboutPage";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/main" element={<MainPage />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/voting" element={<VotingPage />} />
+      <Route path="/setup-candidates" element={<SetupCandidates />} />
+      <Route path="/results" element={<ResultsPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/settings" element={<SettingsPage />} />
+    </Routes>
   );
 }
-
 export default App;

@@ -1,38 +1,675 @@
+body,
+html,
+.main-page,
+.App,
+.content-page {
+  background-color: #ffffff; /* White background */
+  color: #333333; /* Dark text for readability */
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+/* Full screen centered container */
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical center */
+  align-items: center;     /* horizontal center */
+  min-height: 100vh;       /* full viewport height */
+  text-align: center;
+  padding: 0 20px;
+}
+
+
+/* ===== Header ===== */
+header {
+  margin:0px;
+  padding: 30px 20px 40px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 0 -20px 30px -20px; /* full width inside content */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position:relative;
+  top: 0;
+}
+
+header h1 {
+  margin: 0 0 20px 0;
+  font-size: 2rem;
+  color: #ffffff;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Header navigation links */
+header nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+header nav a,
+header nav button {
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+header nav a:hover,
+header nav button:hover {
+  color: #ffd54f;
+}
+
+/* ---- Other existing styles ---- */
+
+/* Heading */
+.head {
+  color: #ff6600; /* orange */
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Subheading */
+.subhead {
+  font-size: 1.2rem;
+  color: #555555;
+  max-width: 600px;
+  margin-bottom: 40px;
+}
+
+/* Outline-style button */
+.primary-btn {
+  background-color: transparent !important;
+  color: #ff6600 !important;
+  border: 2px solid #ff6600 !important;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  background-color: #ff6600 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* Links */
+a {
+  color: #ff6600;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Section headings */
+h2, h3 {
+  color: #ff6600;
+}
+
+/* Paragraphs */
+p {
+  color: #333333;
+}
+
+/* Lists */
+ul {
+  margin-left: 20px;
+}
+
+/* Content wrapper */
+.content-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Center vote button */
+.content-page .primary-btn {
+  margin-top: 20px;
+}
+
+
+/* =============== Centered Card =============== */
+.form-container {
+  max-width: 380px;
+  margin: 60px auto;
+  padding: 50px;
+  background: #ffffff;               /* clean white card */
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* =============== Headings =============== */
+.form-container h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ff6600;
+  margin-bottom: 24px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.form-container h4 {
+  text-align: left;
+  font-size: 15px;
+  color: #ff6600;
+  margin: 18px 0 6px 2px;
+}
+
+/* =============== Inputs =============== */
+.form-container input {
+  width: 90%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333;
+  background: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-container input:focus {
+  border-color: #ff6600;
+  
+  outline: none;
+}
+
+/* =============== Primary Button =============== */
+.primary-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 22px;
+  background-color: #ff6600;          /* professional blue */
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.primary-btn:hover {
+  background-color: #ff6600;
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* =============== Links & Text =============== */
+.form-container p {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-container a {
+  color: #ff6600;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}
+
+/* =============== Error Message =============== */
+.form-container p[style*="color: red"] {
+  color: #d32f2f !important;
+  background: #fdecea;
+  border: 1px solid #f5c2c0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-top: 0;
+}
+
+/* ========================= SetupCandidates Page ========================= */
+.setup-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  background-color: #ffffff; /* White background */
+  padding: 40px;
+  border-radius: 12px;
+  /* box-shadow removed to delete borderline */
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color:"#ff6600";
+}
+
+/* ========================= Headings ========================= */
+.setup-container h2,
+.setup-container h3 {
+  color: #ff6600; /* Orange headings */
+  font-weight: 600;
+}
+
+.setup-container h2 {
+  margin-bottom: 25px;
+  font-size: 2rem;
+  color:#ff6600;
+}
+
+.setup-container h3 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color:#ff6600;
+}
+
+/* ========================= Icons ========================= */
+/* Default color for all react-icons inside container */
+.setup-container svg {
+  color: #ff6600;
+  transition: color 0.3s ease;
+}
+
+/* ========================= Labels ========================= */
+.setup-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333333;
+  text-align: left;
+  margin-left: 10%;
+}
+
+/* ========================= Inputs and Selects ========================= */
+.setup-container input,
+.setup-container select {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px 14px;
+  margin: 10px 0 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.setup-container input:focus,
+.setup-container select:focus {
+  border-color: #ff6600;
+  box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+}
+
+/* ========================= Buttons ========================= */
+.setup-container button {
+  background-color: transparent;      /* start transparent */
+  color: #ff6600;                     /* orange text/icon initially */
+  border: 1px solid #ff6600;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+
+  /* center text and icon */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;            /* <-- ensures text & icon are centered */
+  gap: 6px;                           /* space between icon and text */
+
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover: full orange fill, white text + icons */
+.setup-container button:hover {
+  background-color: #ff6600;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* When button is hovered, any SVG icon inside becomes white */
+.setup-container button:hover svg {
+  color: #ffffff;
+}
+
+/* ========================= Scrollable Table ========================= */
+/* Wrap your <table> with <div class="table-wrapper"> in the JSX */
+.table-wrapper {
+  max-height: 400px;            /* vertical scroll limit */
+  overflow-x: auto;             /* horizontal scroll */
+  overflow-y: auto;             /* vertical scroll */
+  margin: 25px auto 40px auto;
+  width: 95%;
+  border: 1px solid #ccc;       /* thin border around the scroll area */
+  border-radius: 6px;
+}
+
+/* ========================= Tables ========================= */
+.setup-container table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;             /* force horizontal scroll if too narrow */
+}
+
+.setup-container th,
+.setup-container td {
+  border: 1px solid #ccc;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.setup-container th {
+  background-color: #ff6600;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.setup-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.setup-container tr:hover {
+  background-color: #ffe5cc; /* Light orange hover */
+  transition: background-color 0.3s ease;
+}
+
+/* ========================= Paragraphs ========================= */
+.setup-container p {
+  color: #333333;
+  margin-top: 15px;
+  font-size: 1rem;
+}
+
+/* ========================= Responsive ========================= */
+@media screen and (max-width: 768px) {
+  .setup-container input,
+  .setup-container select {
+    width: 95%;
+  }
+
+  .setup-container table {
+    width: 100%;
+  }
+
+  .setup-container th,
+  .setup-container td {
+    padding: 8px 6px;
+    font-size: 0.85rem;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@media screen and (max-width: 480px) {
+  .setup-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .setup-container h3 {
+    font-size: 1.2rem;
+  }
+
+  .setup-container button {
+    width: 90%;
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+  
+}
+/* ===== Voting Page CSS ===== */
+.voting-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px 30px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Headings */
+.voting-container h1 {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #ff6600;
+}
+
+/* ensure all section headings inside candidate / voted sections */
+.voted-section h2,
+.candidate-section h2,
+.candidate-section h3 {
+  color: #ff6600;
+}
+
+/* 🎨 All react-icons inherit this orange */
+svg[class*="fa"],
+svg[class*="Fa"] {
+  color: #ff6600;
+}
+
+/* Dropdown styling */
+.dropdown-container {
+  margin: 15px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.dropdown-container label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #ff6600;   /* label text (like College / Campus) */
+}
+
+.dropdown-container select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  min-width: 200px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.dropdown-container select:focus {
+  outline: none;
+  border-color: #ff6600;
+  box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+}
+
+/* Candidate section */
+.candidate-section {
+  margin-top: 30px;
+}
+
+/* Candidate cards */
+.candidate-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 12px auto;
+  padding: 12px 15px;
+  background-color: #fff8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 400px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.candidate-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.candidate-card p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.candidate-card button {
+  padding: 8px 16px;
+  background-color: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.candidate-card button:hover {
+  background-color: #e65a00;
+}
+
+/* Voted section */
+.voted-section {
+  margin-top: 20px;
+  background-color: #fff3e0;
+  border: 1px solid #ffcc80;
+  border-radius: 10px;
+  padding: 20px;
+  display: inline-block;
+}
+
+.voted-section p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.voted-section img {
+  width: 80px;
+  margin-top: 10px;
+}
+
+/* Message */
+.candidate-section p b {
+  color: #ff6600;
+}
+
+
+
+/* Responsive */
+@media screen and (max-width: 500px) {
+  .voting-container {
+    padding: 15px 20px;
+  }
+
+  .candidate-card {
+    max-width: 90%;
+  }
+
+  .dropdown-container select {
+    min-width: 150px;
+  }
+}
+/* ResultsPage CSS */
+.results-container {
+  padding: 24px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.results-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #ea580c;
+}
+
+.results-summary {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.results-summary-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #d97706;
+}
+
+.results-summary p {
+  font-size: 1rem;
+  color: #374151;
+  margin: 4px 0;
+}
+
+.college-section {
+  margin-bottom: 48px;
+  width: 100%;
+}
+
+.college-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #ea580c;
+}
+
+.chart-wrapper {
+  margin-bottom: 32px;
+  width: 100%;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.campus-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #f97316;
+}
+
+.results-button {
+  background-color: #f97316;
   color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.results-button:hover {
+  background-color: #ea580c;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.no-candidates-text {
+  font-size: 1rem;
+  font-style: italic;
+  color: #9ca3af;
+}
+
+.results-login-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  color: #ea580c;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
