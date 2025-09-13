@@ -14,6 +14,5 @@ const firebaseConfig = {
 //firebase connection means project connected to firebase 
 const app = initializeApp(firebaseConfig);
 
-// Export Auth & Firestore
 export const auth = getAuth(app);
 export const db = getFirestore(app);

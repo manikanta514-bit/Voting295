@@ -19,7 +19,8 @@ import {
   FaArrowRight,
   FaInfoCircle,
   FaCog,
-  
+  FaQuestionCircle,
+  FaFileAlt,
 } from "react-icons/fa";
 
 const highlightStyle = {
@@ -47,8 +48,7 @@ function MainPage() {
   const [hoverIndex, setHoverIndex] = useState(null);
   const navigate = useNavigate();
 
-  const handleVoteClick = () => navigate("/voting");
-
+  // Fetch user data from Firestore
   useEffect(() => {
     const fetchUserData = async () => {
       const user = auth.currentUser;
@@ -64,17 +64,25 @@ function MainPage() {
     return () => unsubscribe();
   }, []);
 
+  const handleVoteClick = () => {
+    if (auth.currentUser) {
+      navigate("/voting"); // authorized user
+    } else {
+      alert("You are not signed in. Redirecting to Signup page...");
+      navigate("/signup"); 
+    }
+  };
+
   return (
     <div className="main-page" style={{ fontFamily: "'Arial', sans-serif" }}>
       <div className="content-page" style={{ padding: "20px", lineHeight: "1.7" }}>
-      
         <header
           style={{
             background: "linear-gradient(90deg, #ff6600, #ff6600)",
             padding: "30px 20px 40px",
             textAlign: "center",
             borderRadius: "8px",
-            marginTop:"0px",
+            marginTop: "0px",
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
           }}
         >
@@ -103,49 +111,45 @@ function MainPage() {
           >
             <Link
               to="/about"
-              style={{
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                transition: "0.3s",
-                textDecoration: "none",
-              }}
+              style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
               onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
               onMouseLeave={(e) => (e.target.style.color = "white")}
             >
               <FaInfoCircle /> About
             </Link>
-            
-            
+
+            <Link
+              to="/help"
+              style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
+              onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
+              onMouseLeave={(e) => (e.target.style.color = "white")}
+            >
+              <FaQuestionCircle /> Help
+            </Link>
+
+            <Link
+              to="/project-document"
+              style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
+              onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
+              onMouseLeave={(e) => (e.target.style.color = "white")}
+            >
+              <FaFileAlt /> ProjectDocument
+            </Link>
+
             {isAdmin && (
               <Link
                 to="/setup-candidates"
-                style={{
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  transition: "0.3s",
-                  textDecoration: "none",
-                }}
+                style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
                 onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
                 onMouseLeave={(e) => (e.target.style.color = "white")}
               >
                 <FaUserShield /> Admin
               </Link>
             )}
-             
+
             <Link
               to="/signup"
-              style={{
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                transition: "0.3s",
-                textDecoration: "none",
-              }}
+              style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
               onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
               onMouseLeave={(e) => (e.target.style.color = "white")}
             >
@@ -154,14 +158,7 @@ function MainPage() {
 
             <Link
               to="/login"
-              style={{
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                transition: "0.3s",
-                textDecoration: "none",
-              }}
+              style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
               onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
               onMouseLeave={(e) => (e.target.style.color = "white")}
             >
@@ -170,14 +167,7 @@ function MainPage() {
 
             <Link
               to="/settings"
-              style={{
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                transition: "0.3s",
-                textDecoration: "none",
-              }}
+              style={{ color: "white", display: "flex", alignItems: "center", gap: "5px", textDecoration: "none", transition: "0.3s" }}
               onMouseEnter={(e) => (e.target.style.color = "#ffd54f")}
               onMouseLeave={(e) => (e.target.style.color = "white")}
             >
@@ -186,44 +176,17 @@ function MainPage() {
           </nav>
         </header>
 
-        {/* ======= WELCOME ======= */}
-        <p
-          style={{
-            fontSize: "1.2rem",
-            fontWeight: "500",
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        >
+        <p style={{ fontSize: "1.2rem", fontWeight: "500", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
           <FaUser /> Hello {userData ? userData.name : "Guest"}, welcome to the Online Voting Platform
         </p>
 
-        {/* ======= VOTING POINTS ======= */}
-        <section
-          style={{
-            backgroundColor: "#fff8e1",
-            padding: "20px",
-            borderRadius: "12px",
-            marginBottom: "40px",
-            textAlign: "center",
-          }}
-        >
+        {/* Voting points section */}
+        <section style={{ backgroundColor: "#fff8e1", padding: "20px", borderRadius: "12px", marginBottom: "40px", textAlign: "center" }}>
           <p style={{ fontSize: "1.1rem", marginBottom: "20px" }}>
             Voting is simple, ensures fairness, and teaches students responsible participation.
           </p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "40px",
-              flexWrap: "wrap",
-              marginTop: "20px",
-              marginBottom: "30px",
-            }}
-          >
-            {[
+          <div style={{ display: "flex", justifyContent: "center", gap: "40px", flexWrap: "wrap", marginTop: "20px", marginBottom: "30px" }}>
+            {[ 
               { icon: <FaUser size={30} color="#ff6600" />, text: "Students learn proper election practices" },
               { icon: <FaCheckCircle size={30} color="#ff6600" />, text: "Vote Once Only" },
               { icon: <FaChartBar size={30} color="#ff6600" />, text: "Instant Results" },
@@ -231,10 +194,7 @@ function MainPage() {
             ].map((item, index) => (
               <div
                 key={index}
-                style={{
-                  ...highlightStyle,
-                  ...(hoverIndex === index ? highlightHover : {}),
-                }}
+                style={{ ...highlightStyle, ...(hoverIndex === index ? highlightHover : {}) }}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
               >
@@ -245,18 +205,10 @@ function MainPage() {
           </div>
         </section>
 
-        {/* ======= HOW IT WORKS ======= */}
+        {/* How it works */}
         <section style={{ marginBottom: "40px" }}>
           <h3 style={{ marginBottom: "20px" }}>How It Works</h3>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              textAlign: "center",
-              flexWrap: "wrap",
-              gap: "20px",
-            }}
-          >
+          <div style={{ display: "flex", justifyContent: "space-around", textAlign: "center", flexWrap: "wrap", gap: "20px" }}>
             <div style={{ flex: "1 1 200px" }}>
               <FaUserPlus size={40} color="#ff6600" />
               <h4> Register</h4>
@@ -275,9 +227,11 @@ function MainPage() {
           </div>
         </section>
 
-        {/* ======= CALL TO ACTION ======= */}
         <div style={{ marginTop: "40px", textAlign: "center" }}>
-          <button className="primary-btn" onClick={handleVoteClick}>
+          <button
+            className="primary-btn"
+            onClick={handleVoteClick}
+          >
             Proceed to Cast Your Vote <FaArrowRight style={{ marginRight: "8px" }} />
           </button>
         </div>

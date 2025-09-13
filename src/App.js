@@ -9,6 +9,8 @@ import ResultsPage from "./pages/ResultsPage";
 import LandingPage from "./pages/LandingPage";
 import AboutPage from "./pages/AboutPage";
 import SettingsPage from "./pages/SettingsPage";
+import Help from "./pages/Help";
+import ProjectDocument from "./pages/ProjectDocument";
 
 function App() {
   return (
@@ -22,6 +24,10 @@ function App() {
       <Route path="/results" element={<ResultsPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/help" element={<Help />} />
+      <Route path="/project-document" element={<ProjectDocument />} />
+
+
     </Routes>
   );
 }
