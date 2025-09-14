@@ -13,6 +13,7 @@ function ProjectDocument() {
         Project Document
       </h1>
 
+      {/* Project iframe */}
       <div
         style={{
           width: "100%",
@@ -33,14 +34,42 @@ function ProjectDocument() {
         />
       </div>
 
-        <div style={{ marginTop: "10px" }}>
-                       <button
-                         className="primary-btn"
-                         onClick={() => navigate("/main")}
-                       >
-                         <FaHome style={{ marginRight: "6px" }} /> Back to Home
-                       </button>
-                     </div>
+      {/* Informative section */}
+      <div
+        style={{
+          maxWidth: "1000px",
+          margin: "20px auto",
+          padding: "15px 20px",
+          backgroundColor: "#fff8e1",
+          borderRadius: "10px",
+          lineHeight: "1.6",
+          textAlign: "center",
+          color: "#333",
+        }}
+      >
+        <h2 style={{ color: "#ff6600", marginBottom: "15px" }}>Website Development Services</h2>
+        <p>
+          We specialize in creating websites tailored to your specific requirements. 
+          Whether it’s a simple portfolio, a business platform, or a full-featured web application, 
+          we can develop it according to your needs. Our goal is to deliver responsive, 
+          user-friendly, and modern web solutions that help you achieve your online objectives.
+        </p>
+        <p>
+          For inquiries, custom projects, or collaboration, you can reach out to us directly at: 
+          <br />
+          <b>sivamanikanta514@gmail.com</b>
+        </p>
+      </div>
+
+      {/* Back button */}
+      <div style={{ marginTop: "10px", textAlign: "center" }}>
+        <button
+          className="primary-btn"
+          onClick={() => navigate("/main")}
+        >
+          <FaHome style={{ marginRight: "6px" }} /> Back to Home
+        </button>
+      </div>
     </div>
   );
 }

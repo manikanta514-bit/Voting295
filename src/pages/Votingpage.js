@@ -18,7 +18,15 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 // React Icons
-import { FaUniversity, FaBuilding, FaVoteYea, FaUserCheck, FaChartBar, FaArrowLeft, FaPoll } from "react-icons/fa";
+import {
+  FaUniversity,
+  FaBuilding,
+  FaVoteYea,
+  FaUserCheck,
+  FaChartBar,
+  FaArrowLeft,
+  FaPoll,
+} from "react-icons/fa";
 
 const VotingPage = () => {
   const [user, setUser] = useState(null);
@@ -81,7 +89,7 @@ const VotingPage = () => {
 
     if (user) {
       const voteDocId = `${user.uid}_${finalCollege}_${selectedVotingType}`;
-      const userVoteRef = doc(db, "users", voteDocId);
+      const userVoteRef = doc(db, "votes", voteDocId);
       const userVoteSnap = await getDoc(userVoteRef);
 
       if (userVoteSnap.exists()) {
@@ -127,12 +135,20 @@ const VotingPage = () => {
 
     try {
       const voteDocId = `${user.uid}_${finalCollege}_${selectedVotingType}`;
-      const userVoteRef = doc(db, "users", voteDocId);
-      const userVoteSnap = await getDoc(userVoteRef);
+      const userVoteRef = doc(db, "votes", voteDocId); 
 
+      const userVoteSnap = await getDoc(userVoteRef);
       if (userVoteSnap.exists()) {
         setMessage("⚠️ You have already voted in this election.");
         return;
+      }
+
+      // 🔹 Get voter name from Firestore users collection
+      let voterName = "Unknown";
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        voterName = userDocSnap.data().name || "Unknown";
       }
 
       const candidateRef = doc(db, "candidates", candidateId);
@@ -140,6 +156,7 @@ const VotingPage = () => {
 
       await setDoc(userVoteRef, {
         userId: user.uid,
+        userName: voterName,         
         candidateId,
         candidateName,
         college: finalCollege,
@@ -147,62 +164,108 @@ const VotingPage = () => {
         timestamp: serverTimestamp(),
       });
 
-      setMessage(" Vote successfully applied!");
+      setMessage("✅ Vote successfully applied!");
       setHasVoted(true);
       setVotedCandidate(candidateName);
       setCandidates([]);
+
+      navigate("/results");
     } catch (error) {
       console.error("Error voting:", error);
     }
   };
 
   return (
-    <div className="voting-container" style={{ fontFamily: "'Arial', sans-serif", padding: "20px", maxWidth: "900px", margin: "0 auto" }}>
-      
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "30px", color: "#ff6600", }}>
+    <div
+      className="voting-container"
+      style={{
+        fontFamily: "'Arial', sans-serif",
+        padding: "20px",
+        maxWidth: "900px",
+        margin: "0 auto",
+      }}
+    >
+      <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "10px",
+          marginBottom: "30px",
+          color: "#ff6600",
+        }}
+      >
         <FaVoteYea size={30} />
         <h1>Online Voting Portal</h1>
       </header>
 
-      
-      <section style={{ backgroundColor: "#fff8e1", padding: "15px 20px", borderRadius: "10px", marginBottom: "30px", textAlign: "center" }}>
+      <section
+        style={{
+          backgroundColor: "#fff8e1",
+          padding: "15px 20px",
+          borderRadius: "10px",
+          marginBottom: "30px",
+          textAlign: "center",
+        }}
+      >
         <p style={{ fontSize: "1.1rem" }}>
-          Voting is simple, fair, and helps students learn about proper election practices.
+          Voting is simple, fair, and helps students learn about proper election
+          practices.
         </p>
       </section>
 
       {/* Dropdowns */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "30px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+          marginBottom: "30px",
+        }}
+      >
         <div className="dropdown-container">
-          <FaUniversity style={{ marginRight: "8px",color:"#ff6600" }} />
+          <FaUniversity style={{ marginRight: "8px", color: "#ff6600" }} />
           <label>College: </label>
           <select
             value={selectedCollege}
-            onChange={(e) => { setSelectedCollege(e.target.value); setSelectedCampus(""); }}
+            onChange={(e) => {
+              setSelectedCollege(e.target.value);
+              setSelectedCampus("");
+            }}
           >
             <option value="">Select College</option>
             {colleges.map((college) => (
-              <option key={college.name} value={college.name}>{college.name}</option>
+              <option key={college.name} value={college.name}>
+                {college.name}
+              </option>
             ))}
           </select>
         </div>
 
         {campuses.length > 0 && (
           <div className="dropdown-container">
-            <FaBuilding style={{ marginRight: "8px",color:"#ff6600" }} />
+            <FaBuilding style={{ marginRight: "8px", color: "#ff6600" }} />
             <label>Campus: </label>
-            <select value={selectedCampus} onChange={(e) => setSelectedCampus(e.target.value)}>
+            <select
+              value={selectedCampus}
+              onChange={(e) => setSelectedCampus(e.target.value)}
+            >
               {campuses.map((campus) => (
-                <option key={campus} value={campus}>{campus}</option>
+                <option key={campus} value={campus}>
+                  {campus}
+                </option>
               ))}
             </select>
           </div>
         )}
 
         <div className="dropdown-container">
-          <FaPoll style={{ marginRight: "8px",color: "#ff6600" }} />
+          <FaPoll style={{ marginRight: "8px", color: "#ff6600" }} />
           <label>Voting Type: </label>
-          <select value={selectedVotingType} onChange={(e) => setSelectedVotingType(e.target.value)}>
+          <select
+            value={selectedVotingType}
+            onChange={(e) => setSelectedVotingType(e.target.value)}
+          >
             <option value="">Select Voting Type</option>
             <option value="CR Election">CR Election</option>
             <option value="Chairman Selection">Chairman Selection</option>
@@ -211,21 +274,55 @@ const VotingPage = () => {
         </div>
       </div>
 
-      {/* Candidate Section */}
-      <div className="candidate-section" style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "30px" }}>
+      <div
+        className="candidate-section"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+          marginBottom: "30px",
+        }}
+      >
         {message && <p style={{ fontWeight: "bold" }}>{message}</p>}
 
         {hasVoted ? (
-          <div className="voted-section" style={{ textAlign: "center", padding: "15px", borderRadius: "8px", backgroundColor: "#e0f7fa" }}>
+          <div
+            className="voted-section"
+            style={{
+              textAlign: "center",
+              padding: "15px",
+              borderRadius: "8px",
+              backgroundColor: "#e0f7fa",
+            }}
+          >
             <FaUserCheck size={30} color="#009688" />
             <h2>You have already voted</h2>
-            <p>You voted for: <b>{votedCandidate}</b></p>
+            <p>
+              You voted for: <b>{votedCandidate}</b>
+            </p>
           </div>
         ) : candidates.length > 0 ? (
           candidates.map((candidate) => (
-            <div key={candidate.id} className="candidate-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 20px", borderRadius: "8px", backgroundColor: "#fff3e0", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
-              <p><b>{candidate.name}</b> — Votes: {candidate.votes}</p>
-              <button className="primary-btn" onClick={() => handleVote(candidate.id, candidate.name)}>
+            <div
+              key={candidate.id}
+              className="candidate-card"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "12px 20px",
+                borderRadius: "8px",
+                backgroundColor: "#fff3e0",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              }}
+            >
+              <p>
+                <b>{candidate.name}</b> — Votes: {candidate.votes}
+              </p>
+              <button
+                className="primary-btn"
+                onClick={() => handleVote(candidate.id, candidate.name)}
+              >
                 <FaVoteYea /> Vote
               </button>
             </div>
@@ -235,8 +332,15 @@ const VotingPage = () => {
         )}
       </div>
 
-     
-      <div style={{ display: "flex", justifyContent: "center", gap: "15px", marginBottom: "30px", flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "15px",
+          marginBottom: "30px",
+          flexWrap: "wrap",
+        }}
+      >
         <button className="primary-btn" onClick={() => navigate("/results")}>
           <FaChartBar /> View Results
         </button>

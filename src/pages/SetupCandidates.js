@@ -1,4 +1,3 @@
-// pages/SetupCandidates.js
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import {
@@ -8,6 +7,7 @@ import {
   onSnapshot,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import "../App.css";
 import {
@@ -20,6 +20,7 @@ import {
   FaTimes,
   FaPlus,
   FaSchool,
+  FaTrash,
 } from "react-icons/fa";
 
 const SetupCandidates = () => {
@@ -30,116 +31,102 @@ const SetupCandidates = () => {
   const [campus, setCampus] = useState("");
   const [votingType, setVotingType] = useState("");
   const [candidatesList, setCandidatesList] = useState([]);
-  const [userVotes, setUserVotes] = useState([]);
-  const [allUsers, setAllUsers] = useState({});
+
+  const [usersList, setUsersList] = useState([]);   // 🔹 All users
+  const [userVotes, setUserVotes] = useState([]);   // 🔹 Votes from votes collection
+
   const [editingRoleId, setEditingRoleId] = useState(null);
   const [newRole, setNewRole] = useState("");
 
-  // Real-time Colleges
+  // ---------- DELETE ----------
+  const handleDeleteCandidate = async (id) => {
+    if (!window.confirm("Delete this candidate?")) return;
+    await deleteDoc(doc(db, "candidates", id));
+  };
+
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm("Delete this user?")) return;
+    await deleteDoc(doc(db, "users", id));
+  };
+
+  const handleDeleteUserVote = async (id) => {
+    if (!window.confirm("Delete this vote?")) return;
+    await deleteDoc(doc(db, "votes", id)); // 🔹 DELETE from votes collection
+  };
+
+  // ---------- FETCH ----------
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "colleges"), (snapshot) => {
-      const list = snapshot.docs.map((doc) => ({
-        name: doc.data().name,
-        campuses: doc.data().campuses || [],
-      }));
-      setColleges(list);
+    const unsub = onSnapshot(collection(db, "colleges"), (snap) => {
+      setColleges(
+        snap.docs.map((d) => ({
+          name: d.data().name,
+          campuses: d.data().campuses || [],
+        }))
+      );
     });
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
-  // Load Campuses Dynamically
   useEffect(() => {
     if (!college) {
       setCampuses([]);
       setCampus("");
       return;
     }
-    const selected = colleges.find((c) => c.name === college);
-    if (selected) {
-      setCampuses(selected.campuses || []);
-      setCampus(selected.campuses[0] || "");
+    const sel = colleges.find((c) => c.name === college);
+    if (sel) {
+      setCampuses(sel.campuses || []);
+      setCampus(sel.campuses[0] || "");
     }
   }, [college, colleges]);
 
-  // Real-time Candidates
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "candidates"), (snapshot) => {
-      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setCandidatesList(list);
+    const unsub = onSnapshot(collection(db, "candidates"), (snap) => {
+      setCandidatesList(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
     });
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
-  // Real-time Users
+  // 🔹 Fetch users
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-      const usersMap = {};
-      snapshot.docs.forEach((docSnap) => {
-        const data = docSnap.data();
-        usersMap[docSnap.id] = {
-          name: data.name || "Unknown",
-          role: data.role || "user",
-        };
-      });
-      setAllUsers(usersMap);
+    const unsub = onSnapshot(collection(db, "users"), (snap) => {
+      const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      setUsersList(all);
     });
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
-  // Real-time Votes
+  // 🔹 Fetch votes from votes collection
   useEffect(() => {
-    const votesQuery = collection(db, "users");
-    const unsubscribe = onSnapshot(votesQuery, (snapshot) => {
-      const votesList = snapshot.docs
-        .map((docSnap) => {
-          const data = docSnap.data();
-          if (!data.candidateName) return null;
-          const userInfo = allUsers[data.userId] || {
-            name: "Unknown",
-            role: "user",
-          };
-          return {
-            id: docSnap.id,
-            userId: data.userId,
-            userName: userInfo.name,
-            role: userInfo.role,
-            candidateName: data.candidateName,
-            college: data.college,
-            votingType: data.votingType,
-            timestamp: data.timestamp,
-          };
-        })
-        .filter((v) => v !== null);
-      setUserVotes(votesList);
+    const unsub = onSnapshot(collection(db, "votes"), (snap) => {
+      const votes = snap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
+      setUserVotes(votes);
     });
-    return () => unsubscribe();
-  }, [allUsers]);
+    return () => unsub();
+  }, []);
 
-  // Add Candidate
+  // ---------- ADD ----------
   const handleAddCandidate = async () => {
     if (!name || !college || !votingType) {
-      alert("⚠️ Please fill all required fields.");
+      alert("Please fill all fields");
       return;
     }
     const finalCollege = campus ? `${college} - ${campus}` : college;
-    try {
-      await addDoc(collection(db, "candidates"), {
-        name,
-        college: finalCollege,
-        votingType,
-        votes: 0,
-      });
-      alert("✅ Candidate added successfully!");
-      setName("");
-      setCollege("");
-      setCampus("");
-      setVotingType("");
-    } catch (error) {
-      console.error("Error adding candidate:", error);
-    }
+    await addDoc(collection(db, "candidates"), {
+      name,
+      college: finalCollege,
+      votingType,
+      votes: 0,
+    });
+    setName("");
+    setCollege("");
+    setCampus("");
+    setVotingType("");
   };
 
-  // Add College
   const handleAddCollege = async () => {
     const newCollege = prompt("Enter new college name:");
     if (!newCollege) return;
@@ -149,33 +136,22 @@ const SetupCandidates = () => {
     const campusesArray = campusesInput
       ? campusesInput.split(",").map((c) => c.trim()).filter((c) => c)
       : [];
-    try {
-      await setDoc(doc(db, "colleges", newCollege), {
-        name: newCollege,
-        campuses: campusesArray,
-      });
-      alert(`College "${newCollege}" added successfully!`);
-    } catch (error) {
-      console.error("Error adding college:", error);
-    }
+    await setDoc(doc(db, "colleges", newCollege), {
+      name: newCollege,
+      campuses: campusesArray,
+    });
   };
 
-  // Edit Role
+  // ---------- ROLE EDIT ----------
   const handleEditRole = (userId, currentRole) => {
     setEditingRoleId(userId);
     setNewRole(currentRole);
   };
-
   const handleSaveRole = async (userId) => {
-    try {
-      await updateDoc(doc(db, "users", userId), { role: newRole });
-      setEditingRoleId(null);
-      setNewRole("");
-    } catch (error) {
-      console.error("Error updating role:", error);
-    }
+    await updateDoc(doc(db, "users", userId), { role: newRole });
+    setEditingRoleId(null);
+    setNewRole("");
   };
-
   const handleCancelEdit = () => {
     setEditingRoleId(null);
     setNewRole("");
@@ -183,46 +159,27 @@ const SetupCandidates = () => {
 
   return (
     <div className="setup-container">
-      <div style={{ textAlign: "center", marginTop: "40px" }}>
-        <h2
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-          }}
-        >
+      <div style={{ textAlign: "center", marginTop: 40 }}>
+        <h2 style={{ display: "flex", justifyContent: "center", gap: 10 }}>
           <FaVoteYea /> Setup Admin & Candidates
         </h2>
 
-        {/* Create College Button */}
         <button
           className="primary-btn"
-          style={{ marginBottom: "20px" }}
+          style={{ marginBottom: 20 }}
           onClick={handleAddCollege}
         >
           <FaPlus /> Create College
         </button>
 
-        {/* Candidate Form */}
-        <div
-          style={{
-            marginTop: "20px",
-            textAlign: "left",
-            maxWidth: "400px",
-            margin: "auto",
-          }}
-        >
+        {/* ---- Add Candidate Form ---- */}
+        <div style={{ maxWidth: 400, margin: "20px auto", textAlign: "left" }}>
           <h4>
             <FaUserPlus /> Candidate Name
           </h4>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <input value={name} onChange={(e) => setName(e.target.value)} />
 
-          <h4 style={{ marginTop: "10px" }}>
+          <h4 style={{ marginTop: 10 }}>
             <FaUniversity /> College
           </h4>
           <select
@@ -242,13 +199,10 @@ const SetupCandidates = () => {
 
           {campuses.length > 0 && (
             <>
-              <h4 style={{ marginTop: "10px" }}>
+              <h4 style={{ marginTop: 10 }}>
                 <FaSchool /> Campus
               </h4>
-              <select
-                value={campus}
-                onChange={(e) => setCampus(e.target.value)}
-              >
+              <select value={campus} onChange={(e) => setCampus(e.target.value)}>
                 {campuses.map((c) => (
                   <option key={c} value={c}>
                     {c}
@@ -258,13 +212,10 @@ const SetupCandidates = () => {
             </>
           )}
 
-          <h4 style={{ marginTop: "10px" }}>
+          <h4 style={{ marginTop: 10 }}>
             <FaVoteYea /> Voting Type
           </h4>
-          <select
-            value={votingType}
-            onChange={(e) => setVotingType(e.target.value)}
-          >
+          <select value={votingType} onChange={(e) => setVotingType(e.target.value)}>
             <option value="">Select Voting Type</option>
             <option value="CR Election">CR Election</option>
             <option value="Chairman Selection">Chairman Selection</option>
@@ -273,117 +224,154 @@ const SetupCandidates = () => {
 
           <button
             className="primary-btn"
-            style={{ marginTop: "20px" }}
+            style={{ marginTop: 20 }}
             onClick={handleAddCandidate}
           >
             <FaPlus /> Add Candidate
           </button>
         </div>
 
-        {/* Candidates Table */}
-        <h2 style={{ marginTop: "40px" }}>
+        {/* ---- Candidates Table ---- */}
+        <h2 style={{ marginTop: 40 }}>
           <FaUsers /> Candidates List
         </h2>
-        {candidatesList.length === 0 ? (
-          <p>No candidates added yet.</p>
-        ) : (
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>College</th>
-                  <th>Voting Type</th>
-                  <th>Votes</th>
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>College</th>
+                <th>Voting Type</th>
+                <th>Votes</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {candidatesList.map((c) => (
+                <tr key={c.id}>
+                  <td>{c.name}</td>
+                  <td>{c.college}</td>
+                  <td>{c.votingType}</td>
+                  <td>{c.votes}</td>
+                  <td>
+                    <button
+                      className="primary-btn"
+                      style={{ backgroundColor: "red" }}
+                      onClick={() => handleDeleteCandidate(c.id)}
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {candidatesList.map((c) => (
-                  <tr key={c.id}>
-                    <td>{c.name}</td>
-                    <td>{c.college}</td>
-                    <td>{c.votingType}</td>
-                    <td>{c.votes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        {/* Users Votes Table */}
-        <h2 style={{ marginTop: "40px" }}>
-          <FaUsers /> Users Votes
+        {/* ---- Users Table ---- */}
+        <h2 style={{ marginTop: 40 }}>
+          <FaUsers /> Users
         </h2>
-        {userVotes.length === 0 ? (
-          <p>No votes cast yet.</p>
-        ) : (
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>User Name</th>
-                  <th>User ID</th>
-                  <th>Candidate</th>
-                  <th>College</th>
-                  <th>Voting Type</th>
-                  <th>Timestamp</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userVotes.map((vote) => (
-                  <tr key={vote.id}>
-                    <td>{vote.userName}</td>
-                    <td>{vote.userId}</td>
-                    <td>{vote.candidateName}</td>
-                    <td>{vote.college}</td>
-                    <td>{vote.votingType}</td>
-                    <td>
-                      {vote.timestamp?.toDate
-                        ? vote.timestamp.toDate().toLocaleString()
-                        : "-"}
-                    </td>
-                    <td>
-                      {editingRoleId === vote.userId ? (
-                        <select
-                          value={newRole}
-                          onChange={(e) => setNewRole(e.target.value)}
-                        >
-                          <option value="user">user</option>
-                          <option value="admin">admin</option>
-                        </select>
-                      ) : (
-                        vote.role
-                      )}
-                    </td>
-                    <td>
-                      {editingRoleId === vote.userId ? (
-                        <>
-                          <button onClick={() => handleSaveRole(vote.userId)}>
-                            <FaSave />
-                          </button>
-                          <button onClick={handleCancelEdit}>
-                            <FaTimes />
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            handleEditRole(vote.userId, vote.role)
-                          }
-                        >
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email / ID</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usersList.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.name || "Unknown"}</td>
+                  <td>{u.userId || u.id}</td>
+                  <td>
+                    {editingRoleId === u.id ? (
+                      <select value={newRole} onChange={(e) => setNewRole(e.target.value)}>
+                        <option value="user">user</option>
+                        <option value="admin">admin</option>
+                      </select>
+                    ) : (
+                      u.role || "user"
+                    )}
+                  </td>
+                  <td>
+                    {editingRoleId === u.id ? (
+                      <>
+                        <button onClick={() => handleSaveRole(u.id)}>
+                          <FaSave />
+                        </button>
+                        <button onClick={handleCancelEdit}>
+                          <FaTimes />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => handleEditRole(u.id, u.role || "user")}>
                           <FaEdit />
                         </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                        <button
+                          className="primary-btn"
+                          style={{ backgroundColor: "red", marginLeft: 8 }}
+                          onClick={() => handleDeleteUser(u.id)}
+                        >
+                          <FaTrash /> Delete
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* ---- User Votes Table ---- */}
+        <h2 style={{ marginTop: 40 }}>
+          <FaUsers /> User Votes
+        </h2>
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>User Name</th>
+                <th>User ID</th>
+                <th>Candidate</th>
+                <th>College</th>
+                <th>Voting Type</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userVotes.map((v) => (
+                <tr key={v.id}>
+                  <td>{v.userName || "Unknown"}</td>
+                  <td>{v.userId}</td>
+                  <td>{v.candidateName}</td>
+                  <td>{v.college}</td>
+                  <td>{v.votingType}</td>
+                  <td>
+                    {v.timestamp?.toDate
+                      ? v.timestamp.toDate().toLocaleString()
+                      : "-"}
+                  </td>
+                  <td>
+                    <button
+                      className="primary-btn"
+                      style={{ backgroundColor: "red" }}
+                      onClick={() => handleDeleteUserVote(v.id)}
+                    >
+                      <FaTrash /> Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
