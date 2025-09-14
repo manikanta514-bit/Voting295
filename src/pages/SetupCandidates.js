@@ -1,27 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase/config";
-import {
-  collection,
-  addDoc,
-  doc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import {collection,addDoc,doc,onSnapshot,setDoc,updateDoc,deleteDoc,} from "firebase/firestore";
 import "../App.css";
-import {
-  FaUserPlus,
-  FaUniversity,
-  FaUsers,
-  FaVoteYea,
-  FaEdit,
-  FaSave,
-  FaTimes,
-  FaPlus,
-  FaSchool,
-  FaTrash,
-} from "react-icons/fa";
+import {FaUserPlus,FaUniversity,FaUsers,FaVoteYea,FaEdit,FaSave,FaTimes,FaPlus,FaSchool,FaTrash,} from "react-icons/fa";
 
 const SetupCandidates = () => {
   const [name, setName] = useState("");
@@ -31,14 +12,11 @@ const SetupCandidates = () => {
   const [campus, setCampus] = useState("");
   const [votingType, setVotingType] = useState("");
   const [candidatesList, setCandidatesList] = useState([]);
-
-  const [usersList, setUsersList] = useState([]);   // 🔹 All users
-  const [userVotes, setUserVotes] = useState([]);   // 🔹 Votes from votes collection
-
+  const [usersList, setUsersList] = useState([]);  
+  const [userVotes, setUserVotes] = useState([]);   
   const [editingRoleId, setEditingRoleId] = useState(null);
   const [newRole, setNewRole] = useState("");
 
-  // ---------- DELETE ----------
   const handleDeleteCandidate = async (id) => {
     if (!window.confirm("Delete this candidate?")) return;
     await deleteDoc(doc(db, "candidates", id));
@@ -54,7 +32,7 @@ const SetupCandidates = () => {
     await deleteDoc(doc(db, "votes", id)); // 🔹 DELETE from votes collection
   };
 
-  // ---------- FETCH ----------
+
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "colleges"), (snap) => {
       setColleges(
@@ -87,7 +65,7 @@ const SetupCandidates = () => {
     return () => unsub();
   }, []);
 
-  // 🔹 Fetch users
+
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "users"), (snap) => {
       const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
@@ -96,7 +74,7 @@ const SetupCandidates = () => {
     return () => unsub();
   }, []);
 
-  // 🔹 Fetch votes from votes collection
+  
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "votes"), (snap) => {
       const votes = snap.docs.map((d) => ({
@@ -108,7 +86,7 @@ const SetupCandidates = () => {
     return () => unsub();
   }, []);
 
-  // ---------- ADD ----------
+
   const handleAddCandidate = async () => {
     if (!name || !college || !votingType) {
       alert("Please fill all fields");
@@ -142,7 +120,7 @@ const SetupCandidates = () => {
     });
   };
 
-  // ---------- ROLE EDIT ----------
+
   const handleEditRole = (userId, currentRole) => {
     setEditingRoleId(userId);
     setNewRole(currentRole);
@@ -172,7 +150,7 @@ const SetupCandidates = () => {
           <FaPlus /> Create College
         </button>
 
-        {/* ---- Add Candidate Form ---- */}
+     
         <div style={{ maxWidth: 400, margin: "20px auto", textAlign: "left" }}>
           <h4>
             <FaUserPlus /> Candidate Name
@@ -231,7 +209,6 @@ const SetupCandidates = () => {
           </button>
         </div>
 
-        {/* ---- Candidates Table ---- */}
         <h2 style={{ marginTop: 40 }}>
           <FaUsers /> Candidates List
         </h2>
@@ -268,7 +245,6 @@ const SetupCandidates = () => {
           </table>
         </div>
 
-        {/* ---- Users Table ---- */}
         <h2 style={{ marginTop: 40 }}>
           <FaUsers /> Users
         </h2>
@@ -328,7 +304,7 @@ const SetupCandidates = () => {
           </table>
         </div>
 
-        {/* ---- User Votes Table ---- */}
+       
         <h2 style={{ marginTop: 40 }}>
           <FaUsers /> User Votes
         </h2>

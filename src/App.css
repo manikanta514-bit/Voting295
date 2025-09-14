@@ -3,8 +3,8 @@ html,
 .main-page,
 .App,
 .content-page {
-  background-color: #ffffff; /* White background */
-  color: #333333; /* Dark text for readability */
+  background-color: #ffffff; 
+  color: #333333; 
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
@@ -13,25 +13,24 @@ body {
   margin: 0;
   padding: 0;
 }
-/* Full screen centered container */
+
 .App {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* vertical center */
-  align-items: center;     /* horizontal center */
-  min-height: 100vh;       /* full viewport height */
+  justify-content: center; 
+  align-items: center;     
+  min-height: 100vh;       
   text-align: center;
   padding: 0 20px;
 }
 
 
-/* ===== Header ===== */
 header {
   margin:0px;
   padding: 30px 20px 40px;
   text-align: center;
   border-radius: 8px;
-  margin: 0 -20px 30px -20px; /* full width inside content */
+  margin: 0 -20px 30px -20px; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position:relative;
   top: 0;
@@ -48,7 +47,7 @@ header h1 {
   gap: 10px;
 }
 
-/* Header navigation links */
+
 header nav {
   display: flex;
   justify-content: center;
@@ -75,16 +74,15 @@ header nav button:hover {
   color: #ffd54f;
 }
 
-/* ---- Other existing styles ---- */
 
-/* Heading */
+
+
 .head {
-  color: #ff6600; /* orange */
+  color: #ff6600; 
   font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
-/* Subheading */
 .subhead {
   font-size: 1.2rem;
   color: #555555;
@@ -92,7 +90,7 @@ header nav button:hover {
   margin-bottom: 40px;
 }
 
-/* Outline-style button */
+
 .primary-btn {
   background-color: transparent !important;
   color: #ff6600 !important;
@@ -111,7 +109,7 @@ header nav button:hover {
   transform: translateY(-2px);
 }
 
-/* Links */
+
 a {
   color: #ff6600;
   text-decoration: none;
@@ -122,47 +120,45 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Section headings */
+
 h2, h3 {
   color: #ff6600;
 }
 
-/* Paragraphs */
+
 p {
   color: #333333;
 }
 
-/* Lists */
 ul {
   margin-left: 20px;
 }
 
-/* Content wrapper */
+
 .content-page {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Center vote button */
+
 .content-page .primary-btn {
   margin-top: 20px;
 }
 
 
-/* =============== Centered Card =============== */
 .form-container {
   max-width: 380px;
   margin: 60px auto;
   padding: 50px;
-  background: #ffffff;               /* clean white card */
+  background: #ffffff;               
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   text-align: center;
 }
 
-/* =============== Headings =============== */
+
 .form-container h2 {
   font-size: 26px;
   font-weight: 600;
@@ -177,7 +173,7 @@ ul {
   margin: 18px 0 6px 2px;
 }
 
-/* =============== Inputs =============== */
+
 .form-container input {
   width: 90%;
   padding: 12px 14px;
@@ -195,12 +191,12 @@ ul {
   outline: none;
 }
 
-/* =============== Primary Button =============== */
+
 .primary-btn {
   width: 100%;
   padding: 12px;
   margin-top: 22px;
-  background-color: #ff6600;          /* professional blue */
+  background-color: #ff6600;          
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -218,7 +214,7 @@ ul {
   transform: translateY(1px);
 }
 
-/* =============== Links & Text =============== */
+
 .form-container p {
   margin-top: 18px;
   font-size: 14px;
@@ -235,7 +231,7 @@ ul {
   text-decoration: underline;
 }
 
-/* =============== Error Message =============== */
+
 .form-container p[style*="color: red"] {
   color: #d32f2f !important;
   background: #fdecea;
@@ -245,23 +241,23 @@ ul {
   margin-top: 0;
 }
 
-/* ========================= SetupCandidates Page ========================= */
+
 .setup-container {
   max-width: 1000px;
   margin: 40px auto;
-  background-color: #ffffff; /* White background */
+  background-color: #ffffff; 
   padding: 40px;
   border-radius: 12px;
-  /* box-shadow removed to delete borderline */
+ 
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   color:"#ff6600";
 }
 
-/* ========================= Headings ========================= */
+
 .setup-container h2,
 .setup-container h3 {
-  color: #ff6600; /* Orange headings */
+  color: #ff6600; 
   font-weight: 600;
 }
 
@@ -278,14 +274,13 @@ ul {
   color:#ff6600;
 }
 
-/* ========================= Icons ========================= */
-/* Default color for all react-icons inside container */
+
 .setup-container svg {
   color: #ff6600;
   transition: color 0.3s ease;
 }
 
-/* ========================= Labels ========================= */
+
 .setup-container label {
   display: block;
   margin-bottom: 5px;
@@ -295,7 +290,7 @@ ul {
   margin-left: 10%;
 }
 
-/* ========================= Inputs and Selects ========================= */
+
 .setup-container input,
 .setup-container select {
   width: 80%;
@@ -316,10 +311,10 @@ ul {
   box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
 }
 
-/* ========================= Buttons ========================= */
+
 .setup-container button {
-  background-color: transparent;      /* start transparent */
-  color: #ff6600;                     /* orange text/icon initially */
+  background-color: transparent;     
+  color: #ff6600;                     
   border: 1px solid #ff6600;
   padding: 12px 25px;
   font-size: 1rem;
@@ -328,44 +323,41 @@ ul {
   cursor: pointer;
   margin-top: 20px;
 
-  /* center text and icon */
+  
   display: inline-flex;
   align-items: center;
-  justify-content: center;            /* <-- ensures text & icon are centered */
-  gap: 6px;                           /* space between icon and text */
+  justify-content: center;            
+  gap: 6px;                       
 
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover: full orange fill, white text + icons */
+
 .setup-container button:hover {
   background-color: #ff6600;
   color: #ffffff;
   transform: translateY(-2px);
 }
 
-/* When button is hovered, any SVG icon inside becomes white */
 .setup-container button:hover svg {
   color: #ffffff;
 }
 
-/* ========================= Scrollable Table ========================= */
-/* Wrap your <table> with <div class="table-wrapper"> in the JSX */
+
 .table-wrapper {
-  max-height: 400px;            /* vertical scroll limit */
-  overflow-x: auto;             /* horizontal scroll */
-  overflow-y: auto;             /* vertical scroll */
+  max-height: 400px;           
+  overflow-x: auto;            
+  overflow-y: auto;             
   margin: 25px auto 40px auto;
   width: 95%;
-  border: 1px solid #ccc;       /* thin border around the scroll area */
+  border: 1px solid #ccc;       
   border-radius: 6px;
 }
 
-/* ========================= Tables ========================= */
 .setup-container table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;             /* force horizontal scroll if too narrow */
+  min-width: 600px;             
 }
 
 .setup-container th,
@@ -391,14 +383,13 @@ ul {
   transition: background-color 0.3s ease;
 }
 
-/* ========================= Paragraphs ========================= */
 .setup-container p {
   color: #333333;
   margin-top: 15px;
   font-size: 1rem;
 }
 
-/* ========================= Responsive ========================= */
+
 @media screen and (max-width: 768px) {
   .setup-container input,
   .setup-container select {
@@ -432,7 +423,7 @@ ul {
   }
   
 }
-/* ===== Voting Page CSS ===== */
+
 .voting-container {
   max-width: 800px;
   margin: 40px auto;
@@ -441,21 +432,21 @@ ul {
   font-family: 'Arial', sans-serif;
 }
 
-/* Headings */
+
 .voting-container h1 {
   font-size: 2rem;
   margin-bottom: 25px;
   color: #ff6600;
 }
 
-/* ensure all section headings inside candidate / voted sections */
+
 .voted-section h2,
 .candidate-section h2,
 .candidate-section h3 {
   color: #ff6600;
 }
 
-/* 🎨 All react-icons inherit this orange */
+
 svg[class*="fa"],
 svg[class*="Fa"] {
   color: #ff6600;
@@ -472,7 +463,7 @@ svg[class*="Fa"] {
 .dropdown-container label {
   font-weight: bold;
   margin-bottom: 6px;
-  color: #ff6600;   /* label text (like College / Campus) */
+  color: #ff6600;   
 }
 
 .dropdown-container select {
@@ -675,16 +666,4 @@ svg[class*="Fa"] {
 }
 .extra-page{
   padding:30px
-}
-/* wrapper that centers one or more buttons horizontally */
-.center-buttons {
-  margin-top: 40px;          /* space above the button row */
-  display: flex;             /* use flexbox */
-  justify-content: center;   /* center horizontally */
-  gap: 20px;                 /* space between buttons */
-}
-
-/* optional: smaller top margin for single button section */
-.center-buttons.small {
-  margin-top: 10px;
 }

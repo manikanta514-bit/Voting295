@@ -1,32 +1,11 @@
 // pages/VotingPage.js
 import React, { useState, useEffect, useCallback } from "react";
 import { db, auth } from "../firebase/config";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  doc,
-  increment,
-  setDoc,
-  getDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import {collection,query,where,getDocs,updateDoc,doc,increment,setDoc,getDoc,serverTimestamp,} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-
-// React Icons
-import {
-  FaUniversity,
-  FaBuilding,
-  FaVoteYea,
-  FaUserCheck,
-  FaChartBar,
-  FaArrowLeft,
-  FaPoll,
-} from "react-icons/fa";
+import {FaUniversity,FaBuilding,FaVoteYea,FaUserCheck,FaChartBar,FaArrowLeft,FaPoll,} from "react-icons/fa";
 
 const VotingPage = () => {
   const [user, setUser] = useState(null);
@@ -143,7 +122,7 @@ const VotingPage = () => {
         return;
       }
 
-      // 🔹 Get voter name from Firestore users collection
+      
       let voterName = "Unknown";
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
@@ -164,7 +143,7 @@ const VotingPage = () => {
         timestamp: serverTimestamp(),
       });
 
-      setMessage("✅ Vote successfully applied!");
+      setMessage(" Vote successfully applied!");
       setHasVoted(true);
       setVotedCandidate(candidateName);
       setCandidates([]);
@@ -214,7 +193,7 @@ const VotingPage = () => {
         </p>
       </section>
 
-      {/* Dropdowns */}
+    
       <div
         style={{
           display: "flex",

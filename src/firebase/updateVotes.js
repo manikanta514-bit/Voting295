@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: "1:648503136744:web:4411745b49d00f9b45145d"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -29,7 +29,7 @@ async function addVotesField() {
     }
   });
 
-  console.log("✅ All missing votes fields updated!");
+  console.log(" All missing votes fields updated!");
 }
 
 addVotesField().catch((error) => console.error("Error updating votes:", error));

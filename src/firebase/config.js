@@ -11,7 +11,6 @@ const firebaseConfig = {
   appId: "1:648503136744:web:4411745b49d00f9b45145d"
 };
 
-//firebase connection means project connected to firebase 
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
