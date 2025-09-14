@@ -676,3 +676,15 @@ svg[class*="Fa"] {
 .extra-page{
   padding:30px
 }
+/* wrapper that centers one or more buttons horizontally */
+.center-buttons {
+  margin-top: 40px;          /* space above the button row */
+  display: flex;             /* use flexbox */
+  justify-content: center;   /* center horizontally */
+  gap: 20px;                 /* space between buttons */
+}
+
+/* optional: smaller top margin for single button section */
+.center-buttons.small {
+  margin-top: 10px;
+}

@@ -11,6 +11,7 @@ import AboutPage from "./pages/AboutPage";
 import SettingsPage from "./pages/SettingsPage";
 import Help from "./pages/Help";
 import ProjectDocument from "./pages/ProjectDocument";
+import WinnerPage from "./pages/WinnerPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/help" element={<Help />} />
       <Route path="/project-document" element={<ProjectDocument />} />
+      <Route path="/winners" element={<WinnerPage />} />
 
 
     </Routes>

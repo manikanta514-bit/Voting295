@@ -1,4 +1,3 @@
-// pages/ResultsPage.js
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../firebase/config";
 import { collection, onSnapshot } from "firebase/firestore";
@@ -17,10 +16,9 @@ import {
   Cell,
 } from "recharts";
 
-// React Icons
-import { FaPoll, FaUniversity, FaUsers, FaHome } from "react-icons/fa";
+import { FaPoll, FaUniversity, FaUsers, FaHome, FaTrophy } from "react-icons/fa";
 
-// Bar colors
+
 const BAR_COLORS = ["#facc15", "#22c55e"];
 
 const ResultsPage = () => {
@@ -33,6 +31,7 @@ const ResultsPage = () => {
 
   const safeVotes = (value) => (typeof value === "number" ? value : 0);
 
+  
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (u) => {
       setUser(u);
@@ -60,6 +59,7 @@ const ResultsPage = () => {
     return () => unsubscribeAuth();
   }, []);
 
+  
   useEffect(() => {
     const uniqueColleges = [
       ...new Set(candidates.map((c) => c.college.split(" - ")[0])),
@@ -78,6 +78,27 @@ const ResultsPage = () => {
     }));
   };
 
+
+  const showWinners = () => {
+    const winnersByType = votingTypes
+      .map((type) => {
+        const typeCandidates = candidates.filter((c) => c.votingType === type);
+        if (typeCandidates.length === 0) return null;
+        const top = typeCandidates.reduce((max, c) =>
+          c.votes > max.votes ? c : max
+        );
+        return {
+          type,
+          name: top.name,
+          votes: top.votes,
+          college: top.college,
+        };
+      })
+      .filter(Boolean);
+
+    navigate("/winners", { state: { winners: winnersByType } });
+  };
+
   if (!user) {
     return (
       <div className="flex-center" style={{ fontFamily: "'Arial', sans-serif" }}>
@@ -87,8 +108,11 @@ const ResultsPage = () => {
   }
 
   return (
-    <div className="results-container" style={{ padding: "20px", fontFamily: "'Arial', sans-serif" }}>
-      {/* Page Header */}
+    <div
+      className="results-container"
+      style={{ padding: "20px", fontFamily: "'Arial', sans-serif" }}
+    >
+    
       <h1
         style={{
           textAlign: "center",
@@ -103,7 +127,7 @@ const ResultsPage = () => {
         <FaPoll /> Voting Results
       </h1>
 
-      {/* Summary Cards */}
+   
       <div
         style={{
           display: "flex",
@@ -113,57 +137,14 @@ const ResultsPage = () => {
           marginBottom: "40px",
         }}
       >
-        <div
-          className="summary-card"
-          style={{
-            background: "#fff8e1",
-            border: "2px solid #ff6600",
-            borderRadius: "12px",
-            padding: "20px",
-            width: "220px",
-            textAlign: "center",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-          }}
-        >
-          <FaUniversity size={30} color="#ff6600" />
-          <p>Total Colleges: <b>{colleges.length}</b></p>
-        </div>
-        <div
-          className="summary-card"
-          style={{
-            background: "#fff8e1",
-            border: "2px solid #ff6600",
-            borderRadius: "12px",
-            padding: "20px",
-            width: "220px",
-            textAlign: "center",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-          }}
-        >
-          <FaPoll size={30} color="#ff6600" />
-          <p>Total Voting Types: <b>{votingTypes.length}</b></p>
-        </div>
-        <div
-          className="summary-card"
-          style={{
-            background: "#fff8e1",
-            border: "2px solid #ff6600",
-            borderRadius: "12px",
-            padding: "20px",
-            width: "220px",
-            textAlign: "center",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-          }}
-        >
-          <FaUsers size={30} color="#ff6600" />
-          <p>Total Candidates: <b>{candidates.length}</b></p>
-        </div>
+        <SummaryCard icon={<FaUniversity size={30} color="#ff6600" />} text={`Total Colleges: ${colleges.length}`} />
+        <SummaryCard icon={<FaPoll size={30} color="#ff6600" />} text={`Total Voting Types: ${votingTypes.length}`} />
+        <SummaryCard icon={<FaUsers size={30} color="#ff6600" />} text={`Total Candidates: ${candidates.length}`} />
       </div>
 
-      {/* Charts per Voting Type */}
+      
       {votingTypes.map((type) => {
         const typeCandidates = candidates.filter((c) => c.votingType === type);
-
         return (
           <div key={type} style={{ marginBottom: "60px" }}>
             <h2
@@ -180,7 +161,10 @@ const ResultsPage = () => {
             </h2>
 
             {colleges.map((college) => {
-              const collegeData = getCandidatesByCollegeCampus(college, typeCandidates);
+              const collegeData = getCandidatesByCollegeCampus(
+                college,
+                typeCandidates
+              );
 
               return collegeData.map((campusData) => {
                 const chartData = campusData.candidates.map((c) => ({
@@ -197,7 +181,7 @@ const ResultsPage = () => {
                       padding: "24px",
                       marginBottom: "30px",
                       width: "100%",
-                      maxWidth: "125%", // full width
+                      maxWidth: "125%",
                       background: "#fff",
                       boxSizing: "border-box",
                       display: "flex",
@@ -229,13 +213,21 @@ const ResultsPage = () => {
                           barCategoryGap="20%"
                         >
                           <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
-                          <XAxis dataKey="name" interval={0} angle={-20} textAnchor="end" />
+                          <XAxis
+                            dataKey="name"
+                            interval={0}
+                            angle={-20}
+                            textAnchor="end"
+                          />
                           <YAxis allowDecimals={false} />
                           <Tooltip />
                           <Bar dataKey="votes" barSize={50}>
                             <LabelList dataKey="votes" position="top" />
                             {chartData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={BAR_COLORS[index % BAR_COLORS.length]} />
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={BAR_COLORS[index % BAR_COLORS.length]}
+                              />
                             ))}
                           </Bar>
                         </BarChart>
@@ -249,8 +241,22 @@ const ResultsPage = () => {
         );
       })}
 
-      
-      <div style={{ textAlign: "center", marginTop: "40px" }}>
+    
+      <div className="center-button">
+        <button
+          className="primary-btn"
+          onClick={showWinners}
+          style={{
+           
+            background: "#22c55e",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <FaTrophy /> Show Winners
+        </button>
+
         <button
           className="primary-btn"
           onClick={() => navigate("/")}
@@ -262,5 +268,23 @@ const ResultsPage = () => {
     </div>
   );
 };
+
+const SummaryCard = ({ icon, text }) => (
+  <div
+    className="summary-card"
+    style={{
+      background: "#fff8e1",
+      border: "2px solid #ff6600",
+      borderRadius: "12px",
+      padding: "20px",
+      width: "220px",
+      textAlign: "center",
+      boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+    }}
+  >
+    {icon}
+    <p><b>{text}</b></p>
+  </div>
+);
 
 export default ResultsPage;
