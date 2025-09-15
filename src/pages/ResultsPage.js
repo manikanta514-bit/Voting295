@@ -212,14 +212,15 @@ const ResultsPage = () => {
                           margin={{ top: 20, right: 20, left: 20, bottom: 50 }}
                           barCategoryGap="20%"
                         >
-                          <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
+                          <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 50" />
                           <XAxis
                             dataKey="name"
                             interval={0}
                             angle={-20}
                             textAnchor="end"
                           />
-                          <YAxis allowDecimals={false} />
+                          <YAxis allowDecimals={false} domain={[0, dataMax => Math.max(dataMax, 75)]} />
+
                           <Tooltip />
                           <Bar dataKey="votes" barSize={50}>
                             <LabelList dataKey="votes" position="top" />
